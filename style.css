@@ -844,3 +844,190 @@ button:disabled {
         animation-iteration-count: 1 !important;
     }
 }
+
+
+/* =========================================
+   SOMETHING RANDOM
+   LAYOUT UPDATE
+   중앙 뽑기 + 왼쪽 세로 인벤토리
+
+   기존 디자인은 유지하고 배치만 변경
+========================================= */
+
+/* 메인 영역을 왼쪽 인벤토리와 중앙 뽑기로 분리 */
+.main-content {
+    display: grid;
+
+    grid-template-columns: 245px minmax(0, 1fr);
+    grid-template-areas: "inventory draw";
+
+    align-items: start;
+    column-gap: 34px;
+
+    min-height: calc(100vh - 160px);
+}
+
+/* =========================================
+   중앙 뽑기 영역
+========================================= */
+
+.draw-section {
+    grid-area: draw;
+
+    position: sticky;
+    top: max(20px, calc(50vh - 200px));
+
+    align-self: start;
+    justify-self: center;
+
+    width: 100%;
+    max-width: 620px;
+
+    margin-bottom: 0;
+}
+
+/* =========================================
+   왼쪽 인벤토리
+========================================= */
+
+.inventory-section {
+    grid-area: inventory;
+
+    align-self: start;
+
+    width: 100%;
+    min-width: 0;
+}
+
+/* 인벤토리 제목과 통계를 세로로 배치 */
+.inventory-section .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+/* 아이템을 한 줄에 하나씩 표시 */
+.main-content .inventory-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+}
+
+/* 아이템 카드를 가로형 목록으로 변경 */
+.inventory-item {
+    display: grid;
+
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 3px;
+
+    min-height: 0;
+
+    padding: 11px;
+
+    text-align: left;
+}
+
+/* 아이콘은 왼쪽 */
+.inventory-item-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+
+    width: 44px;
+    height: 44px;
+
+    margin: 0;
+
+    font-size: 24px;
+}
+
+/* 아이템 이름 */
+.inventory-item-name {
+    grid-column: 2;
+    grid-row: 1;
+
+    align-self: end;
+
+    font-size: 13px;
+}
+
+/* 보유 개수는 오른쪽 */
+.inventory-item-count {
+    grid-column: 3;
+    grid-row: 1;
+
+    align-self: center;
+
+    margin-top: 0;
+
+    white-space: nowrap;
+}
+
+/* 희귀도는 이름 아래 */
+.inventory-item-rarity {
+    grid-column: 2 / 4;
+    grid-row: 2;
+
+    align-self: start;
+    justify-self: start;
+
+    margin-top: 0;
+    padding-top: 1px;
+}
+
+/* 빈 인벤토리 안내도 너비에 맞춤 */
+.inventory-empty {
+    grid-column: 1 / -1;
+
+    padding: 24px 12px;
+}
+
+
+/* =========================================
+   작은 화면에서는 세로 배치
+========================================= */
+
+@media (max-width: 760px) {
+    .main-content {
+        display: flex;
+        flex-direction: column;
+
+        min-height: 0;
+        gap: 0;
+    }
+
+    .draw-section {
+        position: static;
+
+        order: 0;
+
+        width: 100%;
+        max-width: none;
+
+        margin-bottom: 36px;
+    }
+
+    .inventory-section {
+        order: 1;
+    }
+
+    .main-content .inventory-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .inventory-section .section-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        flex-wrap: wrap;
+    }
+
+    .inventory-item {
+        padding: 12px;
+    }
+}
