@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="무언가를 뽑고, 발견하고, 하나씩 모아 보세요."
+    >
+
+    <title>Mystery Draw</title>
+
+    <!-- 기본 디자인 -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- 도감 디자인 -->
+    <link rel="stylesheet" href="codex.css">
+
+    <!-- 희귀도별 효과 디자인 -->
+    <link rel="stylesheet" href="effects.css">
+</head>
+
+<body>
+
+    <!-- ========================================
+         전체 애플리케이션
+    ========================================= -->
+
+    <div id="app">
+
+        <!-- ====================================
+             상단 헤더
+        ===================================== -->
+
+        <header class="main-header">
+
+            <div class="logo-area">
+                <h1 class="logo">MYSTERY DRAW</h1>
+                <p class="subtitle">
+                    무언가를 뽑아 보세요.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                id="codex-open-button"
+                class="codex-open-button"
+                aria-label="도감 열기"
+            >
+                <span aria-hidden="true">▤</span>
+                도감
+            </button>
+
+        </header>
+
+
+        <!-- ====================================
+             메인 콘텐츠
+        ===================================== -->
+
+        <main class="main-content">
+
+            <!-- 뽑기 결과 영역 -->
+
+            <section
+                id="draw-section"
+                class="draw-section"
+                aria-label="뽑기"
+            >
+
+                <div
+                    id="result-window"
+                    class="result-window"
+                    aria-live="polite"
+                    aria-atomic="true"
+                >
+
+                    <!-- 결과 아이콘 -->
+
+                    <div
+                        id="result-icon"
+                        class="result-icon"
+                        aria-hidden="true"
+                    >
+                        ?
+                    </div>
+
+                    <!-- 결과 아이템 이름 -->
+
+                    <h2
+                        id="result-name"
+                        class="result-name"
+                    >
+                        ???
+                    </h2>
+
+                    <!-- 결과 설명 -->
+
+                    <p
+                        id="result-message"
+                        class="result-message"
+                    >
+                        아직 아무것도 뽑지 않았습니다.
+                    </p>
+
+                    <!-- 결과 희귀도 -->
+
+                    <div
+                        id="result-rarity"
+                        class="rarity-badge rarity-none"
+                    >
+                        대기 중
+                    </div>
+
+                </div>
+
+
+                <!-- 뽑기 버튼 -->
+
+                <button
+                    type="button"
+                    id="draw-button"
+                    class="draw-button"
+                >
+                    <span class="draw-button-icon" aria-hidden="true">
+                        ✦
+                    </span>
+
+                    <span>뽑기!</span>
+                </button>
+
+            </section>
+
+
+            <!-- =================================
+                 인벤토리
+            ================================== -->
+
+            <section
+                id="inventory-section"
+                class="inventory-section"
+                aria-labelledby="inventory-title"
+            >
+
+                <div class="section-header">
+
+                    <div class="section-title-area">
+                        <h2
+                            id="inventory-title"
+                            class="section-title"
+                        >
+                            내 인벤토리
+                        </h2>
+
+                        <p class="section-description">
+                            지금까지 모은 아이템
+                        </p>
+                    </div>
+
+                    <div
+                        id="inventory-summary"
+                        class="inventory-summary"
+                    >
+                        <span>
+                            종류
+                            <strong id="inventory-unique-count">0</strong>
+                        </span>
+
+                        <span>
+                            총개수
+                            <strong id="inventory-total-count">0</strong>
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <!-- 획득한 아이템들이 표시되는 영역 -->
+
+                <div
+                    id="inventory-grid"
+                    class="inventory-grid"
+                    aria-live="polite"
+                >
+
+                    <!-- 인벤토리가 비어 있을 때 -->
+
+                    <div
+                        id="inventory-empty"
+                        class="inventory-empty"
+                    >
+                        <div
+                            class="inventory-empty-icon"
+                            aria-hidden="true"
+                        >
+                            ♧
+                        </div>
+
+                        <p>인벤토리가 비어 있습니다.</p>
+
+                        <span>
+                            뽑기를 통해 아이템을 모아 보세요.
+                        </span>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- ====================================
+             도감 창
+             codex.js에서 동작을 담당
+        ===================================== -->
+
+        <div
+            id="codex-overlay"
+            class="codex-overlay"
+            hidden
+        >
+
+            <section
+                id="codex-panel"
+                class="codex-panel"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="codex-title"
+            >
+
+                <header class="codex-header">
+
+                    <div class="codex-heading">
+                        <h2 id="codex-title">아이템 도감</h2>
+
+                        <p class="codex-description">
+                            발견한 아이템들을 확인해 보세요.
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="codex-close-button"
+                        class="codex-close-button"
+                        aria-label="도감 닫기"
+                    >
+                        ✕
+                    </button>
+
+                </header>
+
+
+                <!-- 도감 수집 현황 -->
+
+                <div class="codex-progress-area">
+
+                    <span>발견한 아이템</span>
+
+                    <span id="codex-progress">
+                        <strong id="codex-discovered-count">0</strong>
+                        /
+                        <span id="codex-total-count">0</span>
+                    </span>
+
+                </div>
+
+
+                <!-- 도감 아이템 목록 -->
+
+                <div
+                    id="codex-grid"
+                    class="codex-grid"
+                >
+
+                    <!-- codex.js에서 내용을 생성 -->
+
+                </div>
+
+
+                <!-- 도감이 비어 있을 때 -->
+
+                <div
+                    id="codex-empty"
+                    class="codex-empty"
+                >
+                    <div class="codex-empty-icon" aria-hidden="true">
+                        ◇
+                    </div>
+
+                    <p>아직 발견한 아이템이 없습니다.</p>
+
+                    <span>
+                        새로운 아이템을 뽑으면 이곳에 기록됩니다.
+                    </span>
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================
+         JavaScript 파일
+         의존하는 파일부터 먼저 불러오기
+    ========================================= -->
+
+    <!-- 아이템과 희귀도 정보 -->
+    <script src="rarity.js" defer></script>
+
+    <!-- 희귀도별 임팩트 효과 -->
+    <script src="effects.js" defer></script>
+
+    <!-- 도감 시스템 -->
+    <script src="codex.js" defer></script>
+
+    <!-- 뽑기 및 인벤토리 시스템 -->
+    <script src="script.js" defer></script>
+
+</body>
+</html>
