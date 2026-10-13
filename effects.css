@@ -1,0 +1,919 @@
+
+/* =========================================
+   SOMETHING RANDOM
+   RARITY EFFECTS
+
+   담당 기능:
+   - 희귀도별 결과창 글로우
+   - 아이콘 및 텍스트 애니메이션
+   - 파티클 효과
+   - 등급별 색상 효과
+   - 꽝 결과의 미세한 연출
+
+   기존 style.css / codex.css는 수정하지 않음
+========================================= */
+
+
+/* =========================================
+   1. 기본 효과 레이어
+========================================= */
+
+.result-window.sr-effect-active {
+    isolation: isolate;
+}
+
+/* 결과창 내부의 빛 효과 */
+.result-window.sr-effect-active::before,
+.result-window.sr-effect-active::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    border-radius: inherit;
+}
+
+/* 빛이 퍼지는 배경 */
+.result-window.sr-effect-active::before {
+    z-index: 0;
+
+    opacity: 0;
+
+    background: transparent;
+}
+
+/* 결과창을 가로지르는 빛 */
+.result-window.sr-effect-active::after {
+    z-index: 1;
+
+    opacity: 0;
+
+    background: linear-gradient(
+        115deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.035) 48%,
+        transparent 70%
+    );
+
+    transform: translateX(-120%);
+}
+
+/* 기존 결과창 요소들은 효과보다 앞에 유지 */
+.result-window.sr-effect-active > :not(.sr-effect-particle-layer) {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =========================================
+   2. 파티클 레이어
+========================================= */
+
+.sr-effect-particle-layer {
+    position: absolute;
+    inset: 0;
+
+    z-index: 1;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    border-radius: inherit;
+}
+
+.sr-effect-particle {
+    position: absolute;
+
+    left: var(--particle-x, 50%);
+    top: var(--particle-y, 50%);
+
+    width: var(--particle-size, 5px);
+    height: var(--particle-size, 5px);
+
+    display: block;
+
+    border-radius: 50%;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    animation:
+        sr-particle-float
+        1.2s
+        ease-out
+        var(--particle-delay, 0s)
+        both;
+}
+
+/* 파티클이 시각 효과 레이어 안에만 표시되도록 함 */
+.sr-effect-particle-layer,
+.sr-effect-particle {
+    user-select: none;
+}
+
+
+/* =========================================
+   3. Common — 일반
+   거의 눈에 띄지 않는 미세한 효과
+========================================= */
+
+.result-window.sr-effect-common::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(190, 180, 207, 0.045),
+        transparent 68%
+    );
+
+    animation:
+        sr-aura-common
+        0.9s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-common .result-icon.sr-effect-icon {
+    animation:
+        sr-icon-common
+        0.7s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-common .result-name.sr-effect-name {
+    animation:
+        sr-text-appear
+        0.35s
+        ease-out
+        both;
+}
+
+
+/* =========================================
+   4. Uncommon — 고급
+   은은한 녹색 글로우
+========================================= */
+
+.result-window.sr-effect-uncommon::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(91, 203, 125, 0.13),
+        rgba(91, 203, 125, 0.025) 42%,
+        transparent 72%
+    );
+
+    animation:
+        sr-aura-uncommon
+        1.2s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-uncommon::after {
+    animation:
+        sr-shine-uncommon
+        0.85s
+        ease-out
+        0.05s
+        both;
+}
+
+.result-window.sr-effect-uncommon .result-icon.sr-effect-icon {
+    animation:
+        sr-icon-uncommon
+        1.2s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-uncommon .result-name.sr-effect-name {
+    animation:
+        sr-text-appear
+        0.45s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-uncommon .result-rarity.sr-effect-badge {
+    box-shadow:
+        0 0 14px rgba(91, 203, 125, 0.12);
+
+    border-color: rgba(112, 214, 145, 0.45);
+}
+
+.sr-effect-particle--uncommon {
+    background: #8FD5A5;
+
+    box-shadow:
+        0 0 8px rgba(143, 213, 165, 0.75);
+}
+
+
+/* =========================================
+   5. Rare — 희귀
+   푸른빛과 짧은 빛의 움직임
+========================================= */
+
+.result-window.sr-effect-rare::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(91, 164, 255, 0.20),
+        rgba(91, 164, 255, 0.055) 42%,
+        transparent 74%
+    );
+
+    animation:
+        sr-aura-rare
+        1.5s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-rare::after {
+    background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(131, 188, 255, 0.025) 36%,
+        rgba(170, 215, 255, 0.25) 50%,
+        rgba(131, 188, 255, 0.025) 64%,
+        transparent 80%
+    );
+
+    animation:
+        sr-shine-rare
+        1.05s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-rare .result-icon.sr-effect-icon {
+    animation:
+        sr-icon-rare
+        1.5s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-rare .result-name.sr-effect-name {
+    animation:
+        sr-text-appear
+        0.5s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-rare .result-rarity.sr-effect-badge {
+    border-color: rgba(131, 188, 255, 0.55);
+
+    box-shadow:
+        0 0 10px rgba(83, 151, 255, 0.12),
+        inset 0 0 8px rgba(83, 151, 255, 0.035);
+}
+
+.sr-effect-particle--rare {
+    background: #83BCFF;
+
+    box-shadow:
+        0 0 9px rgba(131, 188, 255, 0.85);
+}
+
+
+/* =========================================
+   6. Epic — 에픽
+   짙은 보라색 글로우와 반짝임
+========================================= */
+
+.result-window.sr-effect-epic::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(164, 101, 255, 0.25),
+        rgba(123, 65, 210, 0.09) 40%,
+        transparent 73%
+    );
+
+    animation:
+        sr-aura-epic
+        1.9s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-epic::after {
+    background: linear-gradient(
+        115deg,
+        transparent 20%,
+        rgba(197, 163, 255, 0.035) 35%,
+        rgba(222, 204, 255, 0.37) 50%,
+        rgba(197, 163, 255, 0.035) 65%,
+        transparent 80%
+    );
+
+    animation:
+        sr-shine-epic
+        1.25s
+        ease-out
+        0.05s
+        both;
+}
+
+.result-window.sr-effect-epic {
+    border-color: #7651A5;
+}
+
+.result-window.sr-effect-epic .result-icon.sr-effect-icon {
+    animation:
+        sr-icon-epic
+        1.9s
+        ease-out
+        both;
+
+    box-shadow:
+        0 0 22px rgba(164, 101, 255, 0.12);
+}
+
+.result-window.sr-effect-epic .result-name.sr-effect-name {
+    animation:
+        sr-text-epic
+        0.65s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-epic .result-rarity.sr-effect-badge {
+    border-color: rgba(197, 163, 255, 0.62);
+
+    box-shadow:
+        0 0 18px rgba(164, 101, 255, 0.2);
+}
+
+.sr-effect-particle--epic {
+    background: #D6B8FF;
+
+    box-shadow:
+        0 0 7px #B78AFF,
+        0 0 15px rgba(164, 101, 255, 0.6);
+}
+
+
+/* =========================================
+   7. Legendary — 전설
+   황금빛 플래시와 강한 글로우
+========================================= */
+
+.result-window.sr-effect-legendary {
+    border-color: #9B7847;
+
+    box-shadow:
+        inset 0 0 35px rgba(255, 194, 91, 0.055),
+        0 0 24px rgba(255, 190, 77, 0.10);
+}
+
+.result-window.sr-effect-legendary::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 210, 117, 0.26),
+        rgba(255, 180, 68, 0.105) 36%,
+        rgba(255, 180, 68, 0.025) 60%,
+        transparent 77%
+    );
+
+    animation:
+        sr-aura-legendary
+        2.4s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-legendary::after {
+    background: linear-gradient(
+        115deg,
+        transparent 15%,
+        rgba(255, 215, 140, 0.06) 35%,
+        rgba(255, 245, 205, 0.55) 50%,
+        rgba(255, 215, 140, 0.06) 65%,
+        transparent 85%
+    );
+
+    animation:
+        sr-shine-legendary
+        1.45s
+        ease-out
+        0.05s
+        both;
+}
+
+.result-window.sr-effect-legendary .result-icon.sr-effect-icon {
+    animation:
+        sr-icon-legendary
+        2.4s
+        ease-out
+        both;
+
+    border-color: rgba(255, 213, 138, 0.70);
+
+    box-shadow:
+        0 0 22px rgba(255, 190, 77, 0.22),
+        inset 0 0 14px rgba(255, 215, 140, 0.10);
+}
+
+.result-window.sr-effect-legendary .result-name.sr-effect-name {
+    animation:
+        sr-text-legendary
+        0.7s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-legendary .result-rarity.sr-effect-badge {
+    color: #FFE4AC;
+
+    border-color: rgba(255, 213, 138, 0.75);
+
+    box-shadow:
+        0 0 18px rgba(255, 190, 77, 0.24),
+        inset 0 0 10px rgba(255, 190, 77, 0.06);
+}
+
+.sr-effect-particle--legendary {
+    background: #FFE4A6;
+
+    box-shadow:
+        0 0 8px #FFD58A,
+        0 0 18px rgba(255, 190, 77, 0.75);
+}
+
+
+/* =========================================
+   8. 꽝 — 아무것도 나오지 않음
+   과도하지 않은 짧은 회색 효과
+========================================= */
+
+.result-window.sr-effect-empty::before {
+    background: radial-gradient(
+        ellipse at center,
+        rgba(180, 169, 198, 0.055),
+        transparent 68%
+    );
+
+    animation:
+        sr-aura-empty
+        0.5s
+        ease-out
+        both;
+}
+
+.result-window.sr-effect-empty .result-icon.sr-effect-icon {
+    animation:
+        sr-icon-empty
+        0.5s
+        ease-out
+        both;
+}
+
+
+/* =========================================
+   9. 파티클 움직임
+========================================= */
+
+@keyframes sr-particle-float {
+    0% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -30%)
+            scale(0.25);
+    }
+
+    20% {
+        opacity: 0.95;
+    }
+
+    65% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+
+        transform:
+            translate(-50%, -170%)
+            scale(1.15);
+    }
+}
+
+
+/* =========================================
+   10. 배경 글로우 애니메이션
+========================================= */
+
+@keyframes sr-aura-common {
+    0% {
+        opacity: 0;
+    }
+
+    45% {
+        opacity: 0.65;
+    }
+
+    100% {
+        opacity: 0.15;
+    }
+}
+
+@keyframes sr-aura-uncommon {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.25;
+    }
+}
+
+@keyframes sr-aura-rare {
+    0% {
+        opacity: 0;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    55% {
+        opacity: 0.75;
+    }
+
+    100% {
+        opacity: 0.18;
+    }
+}
+
+@keyframes sr-aura-epic {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    48% {
+        opacity: 0.65;
+    }
+
+    70% {
+        opacity: 0.9;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
+@keyframes sr-aura-legendary {
+    0% {
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    28% {
+        opacity: 0.45;
+    }
+
+    43% {
+        opacity: 1;
+    }
+
+    64% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 0.2;
+    }
+}
+
+@keyframes sr-aura-empty {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+/* =========================================
+   11. 빛이 가로지르는 애니메이션
+========================================= */
+
+@keyframes sr-shine-uncommon {
+    0% {
+        opacity: 0;
+        transform: translateX(-120%);
+    }
+
+    25% {
+        opacity: 0.45;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(120%);
+    }
+}
+
+@keyframes sr-shine-rare {
+    0% {
+        opacity: 0;
+        transform: translateX(-120%);
+    }
+
+    25% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(120%);
+    }
+}
+
+@keyframes sr-shine-epic {
+    0% {
+        opacity: 0;
+        transform: translateX(-120%);
+    }
+
+    25% {
+        opacity: 0.95;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(120%);
+    }
+}
+
+@keyframes sr-shine-legendary {
+    0% {
+        opacity: 0;
+        transform: translateX(-120%);
+    }
+
+    18% {
+        opacity: 1;
+    }
+
+    45% {
+        opacity: 0.8;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(120%);
+    }
+}
+
+
+/* =========================================
+   12. 아이콘 애니메이션
+========================================= */
+
+@keyframes sr-icon-common {
+    0% {
+        transform: scale(0.96);
+    }
+
+    55% {
+        transform: scale(1.025);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes sr-icon-uncommon {
+    0% {
+        transform: scale(0.88);
+        filter: brightness(0.8);
+    }
+
+    35% {
+        transform: scale(1.08);
+        filter: brightness(1.18);
+    }
+
+    65% {
+        transform: scale(0.98);
+        filter: brightness(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes sr-icon-rare {
+    0% {
+        transform: scale(0.82);
+        filter: brightness(0.7);
+    }
+
+    35% {
+        transform: scale(1.12);
+        filter: brightness(1.45);
+    }
+
+    60% {
+        transform: scale(0.98);
+        filter: brightness(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes sr-icon-epic {
+    0% {
+        transform: scale(0.72) rotate(-5deg);
+        filter: brightness(0.65);
+    }
+
+    30% {
+        transform: scale(1.15) rotate(4deg);
+        filter: brightness(1.55);
+    }
+
+    48% {
+        transform: scale(0.96) rotate(-2deg);
+        filter: brightness(1.3);
+    }
+
+    68% {
+        transform: scale(1.035) rotate(1deg);
+        filter: brightness(1.15);
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+        filter: brightness(1);
+    }
+}
+
+@keyframes sr-icon-legendary {
+    0% {
+        transform: scale(0.62);
+        filter: brightness(0.55);
+    }
+
+    18% {
+        transform: scale(1.18);
+        filter: brightness(1.9);
+    }
+
+    33% {
+        transform: scale(0.95);
+        filter: brightness(1.35);
+    }
+
+    48% {
+        transform: scale(1.10);
+        filter: brightness(1.7);
+    }
+
+    68% {
+        transform: scale(1.015);
+        filter: brightness(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes sr-icon-empty {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: scale(0.94);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================
+   13. 텍스트 애니메이션
+========================================= */
+
+@keyframes sr-text-appear {
+    0% {
+        opacity: 0.3;
+        transform: translateY(5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sr-text-epic {
+    0% {
+        opacity: 0;
+        transform: translateY(9px);
+        letter-spacing: 1px;
+    }
+
+    45% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: normal;
+    }
+}
+
+@keyframes sr-text-legendary {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+        filter: brightness(0.6);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translateY(-3px);
+        filter: brightness(1.5);
+    }
+
+    65% {
+        transform: translateY(1px);
+        filter: brightness(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: brightness(1);
+    }
+}
+
+
+/* =========================================
+   14. 애니메이션 접근성
+   움직임 줄이기 설정을 사용하는 경우
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .result-window.sr-effect-active::before,
+    .result-window.sr-effect-active::after,
+    .result-window.sr-effect-active .result-icon,
+    .result-window.sr-effect-active .result-name,
+    .sr-effect-particle {
+        animation: none !important;
+    }
+
+    .result-window.sr-effect-active::before {
+        opacity: 0.25;
+    }
+
+    .result-window.sr-effect-active::after {
+        opacity: 0;
+    }
+
+    .sr-effect-particle {
+        display: none;
+    }
+}
