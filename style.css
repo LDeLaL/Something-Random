@@ -1031,3 +1031,188 @@ button:disabled {
         padding: 12px;
     }
 }
+
+
+/* =========================================
+   SOMETHING RANDOM
+   LAYOUT REFINEMENT
+   왼쪽 인벤토리 + 확대된 중앙 뽑기 창
+========================================= */
+
+/* 화면 전체 너비 사용 */
+#app {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+
+    padding: 32px 24px 55px 10px;
+}
+
+/* 왼쪽 인벤토리와 중앙 뽑기 영역 */
+.main-content {
+    display: grid;
+
+    grid-template-columns: 230px minmax(0, 1fr);
+    grid-template-areas: "inventory draw";
+
+    align-items: start;
+
+    column-gap: 32px;
+    min-height: calc(100vh - 150px);
+}
+
+/* =========================================
+   왼쪽 인벤토리
+========================================= */
+
+.inventory-section {
+    grid-area: inventory;
+
+    width: 100%;
+    min-width: 0;
+
+    margin-left: 0;
+}
+
+/* 아이템은 세로로 나열 */
+.main-content .inventory-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 9px;
+}
+
+/* =========================================
+   중앙 뽑기 영역
+========================================= */
+
+.draw-section {
+    grid-area: draw;
+
+    position: sticky;
+    top: 24px;
+
+    align-self: start;
+    justify-self: center;
+
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0;
+    gap: 26px;
+}
+
+/* 결과창을 더 크게 */
+.result-window {
+    width: 100%;
+    min-height: 410px;
+
+    padding: 48px 32px;
+
+    border-radius: 24px;
+}
+
+/* 결과 아이콘 확대 */
+.result-icon {
+    width: 115px;
+    height: 115px;
+
+    margin-bottom: 23px;
+
+    border-radius: 27px;
+    font-size: 55px;
+}
+
+/* 결과 이름 확대 */
+.result-name {
+    font-size: clamp(27px, 3vw, 36px);
+}
+
+/* 결과 설명도 약간 확대 */
+.result-message {
+    max-width: 540px;
+    font-size: 15px;
+}
+
+/* 희귀도 표시 */
+.rarity-badge {
+    margin-top: 22px;
+    padding: 6px 15px;
+
+    font-size: 12px;
+}
+
+/* 뽑기 버튼도 조금 더 넓고 크게 */
+.draw-button {
+    min-height: 68px;
+
+    font-size: 20px;
+    border-radius: 16px;
+}
+
+
+/* =========================================
+   태블릿 및 모바일
+========================================= */
+
+@media (max-width: 760px) {
+    #app {
+        padding: 23px 16px 40px;
+    }
+
+    .main-content {
+        display: flex;
+        flex-direction: column;
+
+        min-height: 0;
+        gap: 0;
+    }
+
+    .draw-section {
+        position: static;
+
+        order: 0;
+
+        width: 100%;
+        max-width: none;
+
+        margin-bottom: 36px;
+        gap: 16px;
+    }
+
+    .result-window {
+        min-height: 320px;
+        padding: 32px 20px;
+    }
+
+    .result-icon {
+        width: 90px;
+        height: 90px;
+
+        margin-bottom: 18px;
+
+        font-size: 44px;
+    }
+
+    .result-name {
+        font-size: 26px;
+    }
+
+    .draw-button {
+        min-height: 58px;
+        font-size: 17px;
+    }
+
+    .inventory-section {
+        order: 1;
+    }
+
+    .inventory-section .section-header {
+        flex-direction: row;
+        align-items: center;
+
+        flex-wrap: wrap;
+    }
+
+    .main-content .inventory-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
