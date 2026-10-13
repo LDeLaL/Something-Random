@@ -1,0 +1,647 @@
+
+/* =========================================
+   SOMETHING RANDOM
+   CODEX STYLE
+
+   도감 전용 디자인
+   기본 style.css는 수정하지 않음
+========================================= */
+
+
+/* =========================================
+   1. 도감 배경 오버레이
+========================================= */
+
+.codex-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(5, 4, 9, 0.84);
+
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+
+    animation: codex-overlay-in 0.2s ease;
+}
+
+.codex-overlay[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================
+   2. 도감 메인 창
+========================================= */
+
+.codex-panel {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 760px;
+    max-height: min(82vh, 780px);
+
+    padding: 28px;
+
+    overflow: hidden;
+
+    color: #F1EDF8;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 0%,
+            rgba(112, 67, 174, 0.10),
+            transparent 55%
+        ),
+        #121019;
+
+    border: 1px solid #4A3566;
+    border-radius: 22px;
+
+    box-shadow:
+        0 20px 80px rgba(0, 0, 0, 0.45),
+        0 0 35px rgba(149, 100, 232, 0.08);
+
+    animation: codex-panel-in 0.22s ease;
+}
+
+
+/* =========================================
+   3. 도감 헤더
+========================================= */
+
+.codex-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding-bottom: 22px;
+
+    border-bottom: 1px solid #30243E;
+}
+
+.codex-heading {
+    min-width: 0;
+}
+
+.codex-heading h2 {
+    margin: 0;
+
+    color: #C5A3FF;
+
+    font-size: 24px;
+    font-weight: 850;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+}
+
+.codex-description {
+    margin: 7px 0 0;
+
+    color: #AAA1BA;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   4. 닫기 버튼
+========================================= */
+
+.codex-close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    width: 38px;
+    height: 38px;
+
+    color: #B9A9D1;
+
+    background: #1A1622;
+
+    border: 1px solid #3C2D50;
+    border-radius: 11px;
+
+    font-size: 17px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.codex-close-button:hover {
+    color: #FFFFFF;
+
+    background: #352347;
+
+    border-color: #9564E8;
+
+    transform: rotate(4deg);
+}
+
+.codex-close-button:active {
+    transform: scale(0.94);
+}
+
+
+/* =========================================
+   5. 도감 진행 상황
+========================================= */
+
+.codex-progress-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin: 22px 0;
+
+    padding: 14px 16px;
+
+    color: #B9AEC9;
+
+    background: rgba(149, 100, 232, 0.055);
+
+    border: 1px solid #342544;
+    border-radius: 12px;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#codex-progress {
+    color: #8F7DA9;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    font-variant-numeric: tabular-nums;
+}
+
+#codex-discovered-count {
+    color: #C5A3FF;
+
+    font-size: 17px;
+    font-weight: 850;
+}
+
+#codex-total-count {
+    color: #B9AEC9;
+
+    font-weight: 750;
+}
+
+
+/* =========================================
+   6. 도감 아이템 그리드
+========================================= */
+
+.codex-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    width: 100%;
+    min-height: 0;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    padding: 2px 5px 5px 2px;
+
+    scrollbar-width: thin;
+    scrollbar-color: #624584 #17131F;
+}
+
+.codex-grid::-webkit-scrollbar {
+    width: 7px;
+}
+
+.codex-grid::-webkit-scrollbar-track {
+    background: #17131F;
+    border-radius: 10px;
+}
+
+.codex-grid::-webkit-scrollbar-thumb {
+    background: #624584;
+    border-radius: 10px;
+}
+
+.codex-grid::-webkit-scrollbar-thumb:hover {
+    background: #9564E8;
+}
+
+
+/* =========================================
+   7. 도감 카드 공통 스타일
+========================================= */
+
+.codex-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    min-width: 0;
+    min-height: 174px;
+
+    padding: 17px 10px 14px;
+
+    background: #191622;
+
+    border: 1px solid #332642;
+    border-radius: 15px;
+
+    text-align: center;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.codex-item:hover {
+    background: #211B2E;
+
+    border-color: #4A3566;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   8. 도감 아이템 아이콘
+========================================= */
+
+.codex-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin-bottom: 12px;
+
+    color: #C5A3FF;
+
+    background: rgba(149, 100, 232, 0.07);
+
+    border: 1px solid rgba(149, 100, 232, 0.16);
+    border-radius: 16px;
+
+    font-size: 28px;
+    line-height: 1;
+
+    user-select: none;
+}
+
+
+/* =========================================
+   9. 아이템 이름
+========================================= */
+
+.codex-item-name {
+    width: 100%;
+
+    color: #F1EDF8;
+
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================
+   10. 아이템 설명
+========================================= */
+
+.codex-item-description {
+    width: 100%;
+
+    margin-top: 6px;
+
+    color: #8F849F;
+
+    font-size: 11px;
+    line-height: 1.6;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================
+   11. 아이템 희귀도
+========================================= */
+
+.codex-item-rarity {
+    margin-top: auto;
+    padding-top: 10px;
+
+    color: #C5A3FF;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================================
+   12. 발견한 아이템
+========================================= */
+
+.codex-item-discovered {
+    background:
+        linear-gradient(
+            150deg,
+            rgba(149, 100, 232, 0.055),
+            transparent 75%
+        ),
+        #191622;
+
+    border-color: #443254;
+}
+
+.codex-item-discovered .codex-item-icon {
+    color: #D5C1FF;
+
+    background: rgba(149, 100, 232, 0.11);
+
+    border-color: rgba(149, 100, 232, 0.24);
+}
+
+.codex-item-discovered .codex-item-name {
+    color: #F1EDF8;
+}
+
+.codex-item-discovered .codex-item-description {
+    color: #A69BB7;
+}
+
+
+/* =========================================
+   13. 아직 발견하지 못한 아이템
+========================================= */
+
+.codex-item-locked {
+    background: #14121A;
+
+    border-color: #292330;
+}
+
+.codex-item-locked:hover {
+    background: #191622;
+
+    border-color: #40334E;
+}
+
+.codex-item-locked .codex-item-icon {
+    color: #70667F;
+
+    background: #1B1721;
+
+    border-color: #302739;
+
+    font-size: 25px;
+}
+
+.codex-item-locked .codex-item-name {
+    color: #8A8098;
+}
+
+.codex-item-locked .codex-item-description {
+    color: #655C72;
+}
+
+.codex-item-locked .codex-item-rarity {
+    color: #70667F;
+}
+
+
+/* =========================================
+   14. 빈 도감 안내
+========================================= */
+
+.codex-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 180px;
+
+    padding: 24px 15px;
+
+    text-align: center;
+}
+
+.codex-empty-icon {
+    margin-bottom: 15px;
+
+    color: #9564E8;
+
+    font-size: 36px;
+    line-height: 1;
+}
+
+.codex-empty p {
+    margin: 0;
+
+    color: #C1B5D1;
+
+    font-size: 14px;
+    font-weight: 750;
+    line-height: 1.6;
+}
+
+.codex-empty span {
+    margin-top: 8px;
+
+    color: #82768F;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+
+/* =========================================
+   15. 도감이 열렸을 때 배경 스크롤 방지
+========================================= */
+
+body.codex-open {
+    overflow: hidden;
+}
+
+
+/* =========================================
+   16. 애니메이션
+========================================= */
+
+@keyframes codex-overlay-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes codex-panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* =========================================
+   17. 태블릿
+========================================= */
+
+@media (max-width: 600px) {
+    .codex-overlay {
+        padding: 14px;
+    }
+
+    .codex-panel {
+        max-height: 88vh;
+
+        padding: 20px 16px;
+
+        border-radius: 18px;
+    }
+
+    .codex-header {
+        gap: 12px;
+
+        padding-bottom: 17px;
+    }
+
+    .codex-heading h2 {
+        font-size: 21px;
+    }
+
+    .codex-description {
+        font-size: 12px;
+    }
+
+    .codex-close-button {
+        width: 35px;
+        height: 35px;
+    }
+
+    .codex-progress-area {
+        margin: 16px 0;
+
+        padding: 12px;
+
+        font-size: 12px;
+    }
+
+    .codex-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+        gap: 8px;
+    }
+
+    .codex-item {
+        min-height: 155px;
+
+        padding: 13px 6px 11px;
+
+        border-radius: 12px;
+    }
+
+    .codex-item-icon {
+        width: 47px;
+        height: 47px;
+
+        margin-bottom: 10px;
+
+        border-radius: 13px;
+
+        font-size: 24px;
+    }
+
+    .codex-item-name {
+        font-size: 12px;
+    }
+
+    .codex-item-description {
+        font-size: 10px;
+    }
+
+    .codex-item-rarity {
+        font-size: 9px;
+    }
+}
+
+
+/* =========================================
+   18. 작은 모바일 화면
+========================================= */
+
+@media (max-width: 360px) {
+    .codex-overlay {
+        padding: 8px;
+    }
+
+    .codex-panel {
+        padding: 17px 11px;
+    }
+
+    .codex-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .codex-item {
+        min-height: 150px;
+    }
+}
+
+
+/* =========================================
+   19. 움직임 줄이기 설정
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .codex-overlay,
+    .codex-panel {
+        animation: none !important;
+    }
+
+    .codex-item,
+    .codex-close-button {
+        transition: none !important;
+    }
+}
