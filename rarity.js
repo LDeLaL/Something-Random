@@ -1,102 +1,81 @@
 
 /* =========================================
-   SOMETHING RANDOM
-   RARITY SYSTEM
-
-   담당 기능:
-   - 아이템 목록 관리
-   - 희귀도 등급 관리
-   - 등장 확률 계산
-   - 뽑기 결과 결정
-   - 희귀도별 정보 제공
-
-   script.js / codex.js / effects.js 연동
-========================================= */
+   SOMETHING RANDOM — RARITY SYSTEM
+   총 29종의 아이템
+   꽝 확률 25% 유지
+   ========================================= */
 
 (() => {
     "use strict";
 
-
-    // =====================================
-    // 1. 기본 설정
-    // =====================================
-
     const EMPTY_CHANCE = 25;
 
-    // 아이템이 나오지 않을 확률: 25%
-    // 나머지 75%에서 아이템을 추첨한다.
-
-
-    // =====================================
-    // 2. 희귀도 등급
-    // =====================================
-
+    /* 등급 설정 */
     const RARITIES = {
         Common: {
-            id: "Common",
+            id: "common",
             name: "Common",
-            label: "일반",
+            label: "Common",
             rank: 1,
-            color: "#B8B1C4",
+            color: "#a8a8b8",
             effect: "none",
-            description: "흔하게 발견할 수 있는 아이템입니다."
+            description: "일반적인 아이템입니다."
         },
 
         Uncommon: {
-            id: "Uncommon",
+            id: "uncommon",
             name: "Uncommon",
-            label: "고급",
+            label: "Uncommon",
             rank: 2,
-            color: "#8FD5A5",
-            effect: "none",
+            color: "#65d69a",
+            effect: "glow",
             description: "조금 더 특별한 아이템입니다."
         },
 
         Rare: {
-            id: "Rare",
+            id: "rare",
             name: "Rare",
-            label: "희귀",
+            label: "Rare",
             rank: 3,
-            color: "#83BCFF",
-            effect: "rare",
-            description: "발견하기 어려운 아이템입니다."
+            color: "#63a8ff",
+            effect: "sparkle",
+            description: "희귀한 아이템입니다."
         },
 
         Epic: {
-            id: "Epic",
+            id: "epic",
             name: "Epic",
-            label: "에픽",
+            label: "Epic",
             rank: 4,
-            color: "#C5A3FF",
-            effect: "epic",
-            description: "상당히 드문 아이템입니다."
+            color: "#bd83ff",
+            effect: "burst",
+            description: "매우 희귀한 아이템입니다."
         },
 
         Legendary: {
-            id: "Legendary",
+            id: "legendary",
             name: "Legendary",
-            label: "전설",
+            label: "Legendary",
             rank: 5,
-            color: "#FFD58A",
+            color: "#ffd36b",
             effect: "legendary",
-            description: "매우 낮은 확률로 발견되는 아이템입니다."
+            description: "아주 특별한 아이템입니다."
         }
     };
 
 
-    // =====================================
-    // 3. 아이템 목록
-    //
-    // weight:
-    // 아이템이 등장하는 상대적인 가중치.
-    //
-    // 전체 가중치 합계는 100이다.
-    // 꽝 확률은 별도로 25% 적용한다.
-    //
-    // 기존 아이템 ID는 변경하지 않는 것이 좋다.
-    // =====================================
+    /* =========================================
+       아이템 목록
+       기존 9종 + 신규 20종 = 총 29종
+       weight는 등장 가중치입니다.
+       ========================================= */
 
     const ITEMS = [
+
+        /* -------------------------------------
+           기존 아이템 9종
+           ------------------------------------- */
+
         {
             id: "potato",
             name: "감자",
@@ -105,230 +84,377 @@
             rarity: "Common",
             weight: 25
         },
-
         {
             id: "wood",
             name: "나무",
             icon: "🪵",
-            description: "어디에나 쓸 수 있는 나무입니다.",
+            description: "어디서든 볼 수 있는 나무입니다.",
             rarity: "Common",
             weight: 20
         },
-
         {
             id: "stone",
             name: "돌",
             icon: "🪨",
-            description: "단단하고 흔한 돌입니다.",
+            description: "단단한 돌멩이입니다.",
             rarity: "Common",
             weight: 18
         },
-
         {
             id: "apple",
             name: "사과",
             icon: "🍎",
-            description: "먹음직스러운 빨간 사과입니다.",
+            description: "먹음직스러운 사과입니다.",
             rarity: "Uncommon",
             weight: 12
         },
-
         {
             id: "coal",
             name: "석탄",
             icon: "⚫",
-            description: "검고 단단한 석탄입니다.",
+            description: "연료로 사용할 수 있는 석탄입니다.",
             rarity: "Uncommon",
             weight: 9
         },
-
         {
             id: "metal",
             name: "금속",
             icon: "🔩",
-            description: "쓸모가 많아 보이는 금속입니다.",
+            description: "다양하게 활용할 수 있는 금속입니다.",
             rarity: "Uncommon",
             weight: 7
         },
-
         {
             id: "iron_ore",
             name: "철광석",
             icon: "⛏️",
-            description: "철을 얻을 수 있을 것 같은 광석입니다.",
+            description: "철을 얻을 수 있는 광석입니다.",
             rarity: "Rare",
             weight: 5
         },
-
         {
             id: "amethyst",
             name: "보라색 수정",
             icon: "💎",
-            description: "희미한 빛을 내는 신비로운 수정입니다.",
+            description: "아름다운 보랏빛을 띠는 수정입니다.",
             rarity: "Epic",
             weight: 3
         },
-
         {
             id: "gold_nugget",
             name: "금 조각",
             icon: "🪙",
-            description: "반짝이는 귀한 금 조각입니다.",
+            description: "반짝이는 귀중한 금 조각입니다.",
+            rarity: "Legendary",
+            weight: 1
+        },
+
+
+        /* -------------------------------------
+           신규 Common 아이템 6종
+           ------------------------------------- */
+
+        {
+            id: "dirt",
+            name: "흙",
+            icon: "🟫",
+            description: "땅을 이루는 흔한 물질입니다.",
+            rarity: "Common",
+            weight: 4
+        },
+        {
+            id: "sand",
+            name: "모래",
+            icon: "🏖️",
+            description: "작은 알갱이로 이루어진 모래입니다.",
+            rarity: "Common",
+            weight: 4
+        },
+        {
+            id: "clay",
+            name: "점토",
+            icon: "🧱",
+            description: "물기를 머금으면 빚기 쉬운 흙입니다.",
+            rarity: "Common",
+            weight: 3
+        },
+        {
+            id: "water",
+            name: "물",
+            icon: "💧",
+            description: "생명과 자연에 필수적인 물질입니다.",
+            rarity: "Common",
+            weight: 3
+        },
+        {
+            id: "paper",
+            name: "종이",
+            icon: "📄",
+            description: "글을 쓰거나 물건을 포장할 때 사용합니다.",
+            rarity: "Common",
+            weight: 2
+        },
+        {
+            id: "granite",
+            name: "화강암",
+            icon: "🪨",
+            description: "여러 광물로 이루어진 단단한 암석입니다.",
+            rarity: "Common",
+            weight: 2
+        },
+
+
+        /* -------------------------------------
+           신규 Uncommon 아이템 9종
+           ------------------------------------- */
+
+        {
+            id: "glass",
+            name: "유리",
+            icon: "🪟",
+            description: "투명하고 단단하지만 깨지기 쉬운 물질입니다.",
+            rarity: "Uncommon",
+            weight: 3
+        },
+        {
+            id: "plastic",
+            name: "플라스틱",
+            icon: "♻️",
+            description: "다양한 형태로 가공할 수 있는 재료입니다.",
+            rarity: "Uncommon",
+            weight: 2
+        },
+        {
+            id: "rubber",
+            name: "고무",
+            icon: "🛞",
+            description: "탄성이 뛰어난 재료입니다.",
+            rarity: "Uncommon",
+            weight: 2
+        },
+        {
+            id: "fabric",
+            name: "천",
+            icon: "🧵",
+            description: "실을 엮어 만든 천입니다.",
+            rarity: "Uncommon",
+            weight: 2
+        },
+        {
+            id: "leather",
+            name: "가죽",
+            icon: "🟤",
+            description: "튼튼하고 유연한 가죽 재료입니다.",
+            rarity: "Uncommon",
+            weight: 2
+        },
+        {
+            id: "copper_ore",
+            name: "구리 광석",
+            icon: "🟠",
+            description: "구리를 얻을 수 있는 광석입니다.",
+            rarity: "Uncommon",
+            weight: 3
+        },
+        {
+            id: "aluminum",
+            name: "알루미늄",
+            icon: "🥫",
+            description: "가볍고 다양한 곳에 쓰이는 금속입니다.",
+            rarity: "Uncommon",
+            weight: 3
+        },
+        {
+            id: "marble",
+            name: "대리석",
+            icon: "◻️",
+            description: "건축과 조각에 널리 쓰이는 암석입니다.",
+            rarity: "Uncommon",
+            weight: 1
+        },
+        {
+            id: "quartz",
+            name: "석영",
+            icon: "🔹",
+            description: "자연에서 흔히 발견되는 광물입니다.",
+            rarity: "Uncommon",
+            weight: 2
+        },
+
+
+        /* -------------------------------------
+           신규 Rare 아이템 3종
+           ------------------------------------- */
+
+        {
+            id: "silver_ore",
+            name: "은 광석",
+            icon: "🥈",
+            description: "은을 얻을 수 있는 광석입니다.",
+            rarity: "Rare",
+            weight: 2
+        },
+        {
+            id: "sulfur",
+            name: "황",
+            icon: "🟡",
+            description: "노란색을 띠는 원소 물질입니다.",
+            rarity: "Rare",
+            weight: 2
+        },
+        {
+            id: "obsidian",
+            name: "흑요석",
+            icon: "⚫",
+            description: "용암이 빠르게 식어 만들어진 화산암입니다.",
+            rarity: "Rare",
+            weight: 2
+        },
+
+
+        /* -------------------------------------
+           신규 Epic 아이템 1종
+           ------------------------------------- */
+
+        {
+            id: "emerald",
+            name: "에메랄드",
+            icon: "💚",
+            description: "선명한 녹색으로 유명한 보석입니다.",
+            rarity: "Epic",
+            weight: 2
+        },
+
+
+        /* -------------------------------------
+           신규 Legendary 아이템 1종
+           ------------------------------------- */
+
+        {
+            id: "diamond",
+            name: "다이아몬드",
+            icon: "💎",
+            description: "매우 단단하며 아름답게 빛나는 보석입니다.",
             rarity: "Legendary",
             weight: 1
         }
+
     ];
 
 
-    // =====================================
-    // 4. 아이템 데이터 검사
-    // =====================================
+    /* =========================================
+       뽑기 시스템
+       ========================================= */
 
-    function validateItems(items) {
-        if (!Array.isArray(items)) {
-            throw new TypeError(
-                "[Something Random] 아이템 목록은 배열이어야 합니다."
-            );
-        }
-
-        const ids = new Set();
-
-        for (const item of items) {
-            if (
-                !item ||
-                typeof item.id !== "string" ||
-                item.id.length === 0
-            ) {
-                throw new Error(
-                    "[Something Random] 아이템 ID가 올바르지 않습니다."
-                );
-            }
-
-            if (ids.has(item.id)) {
-                throw new Error(
-                    `[Something Random] 중복된 아이템 ID: ${item.id}`
-                );
-            }
-
-            ids.add(item.id);
-
-            if (!Object.prototype.hasOwnProperty.call(
-                RARITIES,
-                item.rarity
-            )) {
-                throw new Error(
-                    `[Something Random] 존재하지 않는 희귀도: ${item.rarity}`
-                );
-            }
-
-            if (
-                !Number.isFinite(item.weight) ||
-                item.weight < 0
-            ) {
-                throw new Error(
-                    `[Something Random] 잘못된 가중치: ${item.id}`
-                );
-            }
-        }
-
-        return true;
-    }
-
-    validateItems(ITEMS);
-
-
-    // =====================================
-    // 5. 전체 가중치 계산
-    // =====================================
-
-    function getTotalWeight(items = ITEMS) {
-        return items.reduce((total, item) => {
+    function getTotalWeight() {
+        return ITEMS.reduce((total, item) => {
             return total + item.weight;
         }, 0);
     }
 
-
-    // =====================================
-    // 6. 실제 뽑기
-    //
-    // 반환값:
-    // - 아이템 객체: 획득 성공
-    // - null: 아무것도 나오지 않음
-    // =====================================
-
     function draw() {
-        // 먼저 꽝 여부를 결정한다.
+        // 꽝 확률 25%
         if (Math.random() * 100 < EMPTY_CHANCE) {
             return null;
         }
 
-        const items = ITEMS.filter(item => {
-            return item.weight > 0;
-        });
+        const totalWeight = getTotalWeight();
+        let roll = Math.random() * totalWeight;
 
-        const totalWeight = getTotalWeight(items);
+        for (const item of ITEMS) {
+            roll -= item.weight;
 
-        if (totalWeight <= 0) {
-            return null;
-        }
-
-        // 가중치에 따른 아이템 추첨
-        let random = Math.random() * totalWeight;
-
-        for (const item of items) {
-            random -= item.weight;
-
-            if (random < 0) {
+            if (roll < 0) {
                 return item;
             }
         }
 
-        // 부동소수점 오차에 대한 안전장치
-        return items[items.length - 1] || null;
+        // 부동소수점 연산 등의 예외에 대한 안전장치
+        return ITEMS[ITEMS.length - 1] || null;
     }
 
 
-    // =====================================
-    // 7. 희귀도별 확률 계산
-    //
-    // itemPoolChance:
-    // 아이템이 나왔을 때의 희귀도 비율
-    //
-    // overallChance:
-    // 꽝 확률까지 포함한 전체 뽑기 확률
-    // =====================================
+    /* =========================================
+       조회 기능
+       ========================================= */
+
+    function getItems() {
+        return ITEMS;
+    }
+
+    function getRarity(value) {
+        const rarityName =
+            typeof value === "string"
+                ? value
+                : value?.rarity;
+
+        if (!rarityName) {
+            return null;
+        }
+
+        if (RARITIES[rarityName]) {
+            return RARITIES[rarityName];
+        }
+
+        return Object.values(RARITIES).find(rarity => {
+            return rarity.id === rarityName;
+        }) || null;
+    }
+
+    function getItemsByRarity(rarityName) {
+        const rarity = getRarity(rarityName);
+
+        if (!rarity) {
+            return [];
+        }
+
+        return ITEMS.filter(item => {
+            return item.rarity === rarity.name;
+        });
+    }
+
+    function getItemProbability(itemOrId) {
+        const item = typeof itemOrId === "string"
+            ? ITEMS.find(candidate => candidate.id === itemOrId)
+            : itemOrId;
+
+        if (!item || !ITEMS.some(candidate => candidate.id === item.id)) {
+            return 0;
+        }
+
+        // 꽝 확률까지 포함한 전체 뽑기 1회 기준 확률(%)
+        const probability =
+            (item.weight / getTotalWeight()) *
+            (1 - EMPTY_CHANCE / 100) *
+            100;
+
+        return Number(probability.toFixed(4));
+    }
 
     function getRarityStats() {
         const totalWeight = getTotalWeight();
-
         const stats = {};
 
-        for (const rarity of Object.keys(RARITIES)) {
+        for (const [key, rarity] of Object.entries(RARITIES)) {
             const rarityItems = ITEMS.filter(item => {
-                return (
-                    item.rarity === rarity &&
-                    item.weight > 0
-                );
+                return item.rarity === key;
             });
 
-            const rarityWeight = rarityItems.reduce(
-                (total, item) => total + item.weight,
-                0
-            );
+            const rarityWeight = rarityItems.reduce((total, item) => {
+                return total + item.weight;
+            }, 0);
 
-            const itemPoolChance = totalWeight > 0
-                ? (rarityWeight / totalWeight) * 100
-                : 0;
-
-            const overallChance =
-                ((100 - EMPTY_CHANCE) / 100) * itemPoolChance;
-
-            stats[rarity] = {
-                ...RARITIES[rarity],
-                itemCount: rarityItems.length,
-                weight: rarityWeight,
-                itemPoolChance,
-                overallChance
+            stats[key] = {
+                ...rarity,
+                count: rarityItems.length,
+                totalWeight: rarityWeight,
+                probability: totalWeight > 0
+                    ? Number((
+                        (rarityWeight / totalWeight) *
+                        (1 - EMPTY_CHANCE / 100) *
+                        100
+                    ).toFixed(4))
+                    : 0
             };
         }
 
@@ -336,115 +462,26 @@
     }
 
 
-    // =====================================
-    // 8. 개별 아이템 확률 계산
-    // =====================================
+    /* =========================================
+       다른 파일에서 사용할 수 있도록 연결
+       ========================================= */
 
-    function getItemProbability(itemId) {
-        const item = ITEMS.find(entry => {
-            return entry.id === itemId;
-        });
-
-        if (!item) {
-            return 0;
-        }
-
-        const totalWeight = getTotalWeight();
-
-        if (totalWeight <= 0) {
-            return 0;
-        }
-
-        return (
-            ((100 - EMPTY_CHANCE) / 100) *
-            (item.weight / totalWeight) *
-            100
-        );
-    }
-
-
-    // =====================================
-    // 9. 희귀도 정보 가져오기
-    // =====================================
-
-    function getRarity(rarityId) {
-        const rarity = RARITIES[rarityId];
-
-        if (!rarity) {
-            return null;
-        }
-
-        return { ...rarity };
-    }
-
-
-    // =====================================
-    // 10. 희귀도별 아이템 목록
-    // =====================================
-
-    function getItemsByRarity(rarityId) {
-        return ITEMS
-            .filter(item => item.rarity === rarityId)
-            .map(item => ({ ...item }));
-    }
-
-
-    // =====================================
-    // 11. 외부 시스템 연결
-    // =====================================
-
-    // script.js에서 사용하는 아이템 목록
     window.SR_ITEMS = ITEMS;
-
-    // script.js에서 사용하는 추첨 함수
     window.SR_DRAW = draw;
-
-    // effects.js 및 기타 시스템에서 사용하는 정보
     window.SR_RARITIES = RARITIES;
-
-    // 꽝 확률
     window.SR_EMPTY_CHANCE = EMPTY_CHANCE;
 
-    // 추가 API
     window.SomethingRandomRarity = {
         draw,
-
-        getItems() {
-            return ITEMS.map(item => ({ ...item }));
-        },
-
+        getItems,
         getRarity,
-
         getRarityStats,
-
         getItemsByRarity,
-
         getItemProbability,
-
         getEmptyChance() {
             return EMPTY_CHANCE;
         },
-
-        getTotalWeight() {
-            return getTotalWeight();
-        }
+        getTotalWeight
     };
-
-
-    // =====================================
-    // 12. 초기화 로그
-    // =====================================
-
-    console.log(
-        "[Something Random] 희귀도 시스템이 준비되었습니다."
-    );
-
-    console.log(
-        `[Something Random] 등록된 아이템: ${ITEMS.length}종`
-    );
-
-    console.log(
-        `[Something Random] 꽝 확률: ${EMPTY_CHANCE}%`
-    );
 
 })();
