@@ -1228,5 +1228,6 @@ button:disabled {
         position: relative;
         top: auto;
         align-self: center;
+        transform: translateY(-25px);
     }
 }
