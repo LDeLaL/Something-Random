@@ -1216,3 +1216,17 @@ button:disabled {
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+
+/* =========================================
+   SOMETHING RANDOM
+   뽑기 영역 세로 중앙 정렬
+   ========================================= */
+
+@media (min-width: 761px) {
+    .draw-section {
+        position: relative;
+        top: auto;
+        align-self: center;
+    }
+}
