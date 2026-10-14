@@ -195,7 +195,18 @@
 
         // 기본 추첨 방식
         // 가중치 합계 100 중 25는 꽝이다.
-        const items = getItemList();
+        const rarityOrder = {
+    Common: 0,
+    Uncommon: 1,
+    Rare: 2,
+    Epic: 3,
+    Legendary: 4
+};
+
+const items = [...getItemList()].sort((a, b) => {
+    return (rarityOrder[a.rarity] ?? 99) -
+           (rarityOrder[b.rarity] ?? 99);
+});
 
         const totalWeight = items.reduce((sum, item) => {
             const weight = Number(item.weight);
