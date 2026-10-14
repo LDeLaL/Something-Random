@@ -5,53 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Something Random</title>
     <meta
         name="description"
-        content="무언가를 뽑고, 발견하고, 하나씩 모아 보세요."
+        content="Something Random - 무엇이 나올지 모르는 랜덤 뽑기!"
     >
 
-    <title>Something Random</title>
-
-    <!-- 기본 디자인 -->
+    <!-- 기본 테마 -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- 도감 디자인 -->
+    <!-- 도감 시스템 -->
     <link rel="stylesheet" href="codex.css">
 
-    <!-- 희귀도별 효과 디자인 -->
+    <!-- 뽑기 효과 -->
     <link rel="stylesheet" href="effects.css">
 
-    <!-- 업적 디자인 -->
+    <!-- 업적 시스템 -->
     <link rel="stylesheet" href="achievements.css">
 </head>
 
 <body>
-
-    <!-- ========================================
-         전체 애플리케이션
-    ========================================= -->
-
     <div id="app">
 
-        <!-- ====================================
+        <!-- ===============================
              상단 헤더
-        ===================================== -->
-
+             =============================== -->
         <header class="main-header">
 
             <div class="logo-area">
                 <h1 class="logo">SOMETHING RANDOM</h1>
-
                 <p class="subtitle">
-                    무언가를 뽑아 보세요.
+                    무엇이 나올지는 아무도 모른다.
                 </p>
             </div>
 
-            <!-- 상단 기능 버튼 -->
-
+            <!-- 업적 및 도감 버튼 -->
             <div class="header-actions">
-
-                <!-- 업적 열기 -->
 
                 <button
                     type="button"
@@ -62,10 +51,8 @@
                     aria-controls="achievements-overlay"
                 >
                     <span aria-hidden="true">🏆</span>
-                    업적
+                    <span>업적</span>
                 </button>
-
-                <!-- 도감 열기 -->
 
                 <button
                     type="button"
@@ -76,26 +63,23 @@
                     aria-controls="codex-overlay"
                 >
                     <span aria-hidden="true">▤</span>
-                    도감
+                    <span>도감</span>
                 </button>
 
             </div>
-
         </header>
 
 
-        <!-- ====================================
+        <!-- ===============================
              메인 콘텐츠
-        ===================================== -->
-
+             =============================== -->
         <main class="main-content">
 
             <!-- 뽑기 영역 -->
-
             <section
                 id="draw-section"
                 class="draw-section"
-                aria-label="뽑기"
+                aria-label="아이템 뽑기"
             >
 
                 <div
@@ -105,412 +89,294 @@
                     aria-atomic="true"
                 >
 
-                    <!-- 결과 아이콘 -->
-
                     <div
                         id="result-icon"
                         class="result-icon"
                         aria-hidden="true"
                     >
-                        ?
+                        ❔
                     </div>
-
-                    <!-- 결과 아이템 이름 -->
 
                     <h2
                         id="result-name"
                         class="result-name"
                     >
-                        ???
+                        무엇이 나올까?
                     </h2>
-
-                    <!-- 결과 설명 -->
 
                     <p
                         id="result-message"
                         class="result-message"
                     >
-                        아직 아무것도 뽑지 않았습니다.
+                        버튼을 눌러 아이템을 뽑아 보세요.
                     </p>
 
-                    <!-- 결과 희귀도 -->
-
-                    <div
+                    <span
                         id="result-rarity"
                         class="rarity-badge rarity-none"
                     >
-                        대기 중
-                    </div>
+                        READY
+                    </span>
 
                 </div>
-
-
-                <!-- 뽑기 버튼 -->
 
                 <button
                     type="button"
                     id="draw-button"
                     class="draw-button"
                 >
-                    <span
-                        class="draw-button-icon"
-                        aria-hidden="true"
-                    >
-                        ✦
-                    </span>
-
-                    <span>뽑기!</span>
+                    뽑기
                 </button>
 
             </section>
 
 
-            <!-- =================================
-                 인벤토리
-            ================================== -->
-
+            <!-- 인벤토리 영역 -->
             <section
                 id="inventory-section"
                 class="inventory-section"
-                aria-labelledby="inventory-title"
+                aria-label="보유 아이템"
             >
 
                 <div class="section-header">
 
-                    <div class="section-title-area">
+                    <h2 class="section-title">
+                        INVENTORY
+                    </h2>
 
-                        <h2
-                            id="inventory-title"
-                            class="section-title"
-                        >
-                            내 인벤토리
-                        </h2>
-
-                        <p class="section-description">
-                            지금까지 모은 아이템
-                        </p>
-
-                    </div>
-
-                    <div
-                        id="inventory-summary"
-                        class="inventory-summary"
-                    >
-
+                    <div class="inventory-counts">
                         <span>
                             종류
                             <strong id="inventory-unique-count">0</strong>
                         </span>
 
                         <span>
-                            총개수
+                            총 보유
                             <strong id="inventory-total-count">0</strong>
                         </span>
-
                     </div>
 
                 </div>
-
-
-                <!-- 획득 아이템 목록 -->
 
                 <div
                     id="inventory-grid"
                     class="inventory-grid"
-                    aria-live="polite"
+                ></div>
+
+                <p
+                    id="inventory-empty"
+                    class="inventory-empty"
                 >
-
-                    <!-- 빈 인벤토리 안내 -->
-
-                    <div
-                        id="inventory-empty"
-                        class="inventory-empty"
-                    >
-
-                        <div
-                            class="inventory-empty-icon"
-                            aria-hidden="true"
-                        >
-                            ♧
-                        </div>
-
-                        <p>인벤토리가 비어 있습니다.</p>
-
-                        <span>
-                            뽑기를 통해 아이템을 모아 보세요.
-                        </span>
-
-                    </div>
-
-                </div>
+                    아직 획득한 아이템이 없습니다.
+                </p>
 
             </section>
 
         </main>
 
+    </div>
 
-        <!-- ====================================
-             도감 창
-        ===================================== -->
 
-        <div
-            id="codex-overlay"
-            class="codex-overlay"
-            hidden
+    <!-- =================================
+         도감 오버레이
+         ================================= -->
+    <div
+        id="codex-overlay"
+        class="codex-overlay"
+        hidden
+    >
+
+        <section
+            id="codex-panel"
+            class="codex-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="codex-title"
         >
 
-            <section
-                id="codex-panel"
-                class="codex-panel"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="codex-title"
+            <header class="codex-header">
+
+                <div>
+                    <h2 id="codex-title">
+                        ITEM CODEX
+                    </h2>
+
+                    <p>
+                        지금까지 발견한 아이템을 확인하세요.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="codex-close-button"
+                    class="codex-close-button"
+                    aria-label="도감 닫기"
+                >
+                    ×
+                </button>
+
+            </header>
+
+
+            <div
+                id="codex-progress"
+                class="codex-progress-area"
             >
+                <span>발견한 아이템</span>
 
-                <header class="codex-header">
-
-                    <div class="codex-heading">
-
-                        <h2 id="codex-title">
-                            아이템 도감
-                        </h2>
-
-                        <p class="codex-description">
-                            발견한 아이템들을 확인해 보세요.
-                        </p>
-
-                    </div>
-
-                    <button
-                        type="button"
-                        id="codex-close-button"
-                        class="codex-close-button"
-                        aria-label="도감 닫기"
-                    >
-                        ✕
-                    </button>
-
-                </header>
+                <strong>
+                    <span id="codex-discovered-count">0</span>
+                    /
+                    <span id="codex-total-count">0</span>
+                </strong>
+            </div>
 
 
-                <!-- 도감 진행 상황 -->
-
-                <div class="codex-progress-area">
-
-                    <span>발견한 아이템</span>
-
-                    <span id="codex-progress">
-
-                        <strong id="codex-discovered-count">0</strong>
-
-                        /
-
-                        <span id="codex-total-count">0</span>
-
-                    </span>
-
-                </div>
+            <div
+                id="codex-grid"
+                class="codex-grid"
+            ></div>
 
 
-                <!-- 도감 목록 -->
-
-                <div
-                    id="codex-grid"
-                    class="codex-grid"
-                >
-                    <!-- codex.js에서 생성 -->
-                </div>
-
-
-                <!-- 빈 도감 안내 -->
-
-                <div
-                    id="codex-empty"
-                    class="codex-empty"
-                >
-
-                    <div
-                        class="codex-empty-icon"
-                        aria-hidden="true"
-                    >
-                        ◇
-                    </div>
-
-                    <p>아직 발견한 아이템이 없습니다.</p>
-
-                    <span>
-                        새로운 아이템을 뽑으면 이곳에 기록됩니다.
-                    </span>
-
-                </div>
-
-            </section>
-
-        </div>
-
-
-        <!-- ====================================
-             업적 목록 창
-             achievements.js에서 작동
-        ===================================== -->
-
-        <div
-            id="achievements-overlay"
-            class="achievements-overlay"
-            hidden
-        >
-
-            <section
-                id="achievements-panel"
-                class="achievements-panel"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="achievements-title"
+            <p
+                id="codex-empty"
+                class="codex-empty"
             >
+                아직 발견한 아이템이 없습니다.
+                뽑기를 통해 새로운 아이템을 찾아보세요!
+            </p>
 
-                <!-- 업적 헤더 -->
-
-                <header class="achievements-header">
-
-                    <div class="achievements-heading">
-
-                        <h2 id="achievements-title">
-                            업적
-                        </h2>
-
-                        <p class="achievements-description">
-                            다양한 목표를 달성해 보세요.
-                        </p>
-
-                    </div>
-
-                    <button
-                        type="button"
-                        id="achievements-close-button"
-                        class="achievements-close-button"
-                        aria-label="업적 창 닫기"
-                    >
-                        ✕
-                    </button>
-
-                </header>
-
-
-                <!-- 업적 달성 진행 상황 -->
-
-                <section
-                    class="achievements-progress"
-                    aria-label="업적 달성 현황"
-                >
-
-                    <div class="achievements-progress-header">
-
-                        <span>달성 현황</span>
-
-                        <span
-                            id="achievements-progress-count"
-                            aria-live="polite"
-                        >
-                            0 / 12
-                        </span>
-
-                    </div>
-
-                    <div
-                        class="achievements-progress-track"
-                        role="progressbar"
-                        aria-label="업적 달성률"
-                        aria-valuemin="0"
-                        aria-valuemax="12"
-                        aria-valuenow="0"
-                        id="achievements-progress-bar"
-                    >
-
-                        <div
-                            id="achievements-progress-fill"
-                            class="achievements-progress-fill"
-                        ></div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- 업적 목록 -->
-
-                <div
-                    id="achievements-grid"
-                    class="achievements-grid"
-                    aria-live="polite"
-                >
-                    <!-- achievements.js에서 생성 -->
-                </div>
-
-
-                <!-- 업적이 없을 때 -->
-
-                <div
-                    id="achievements-empty"
-                    class="achievements-empty"
-                    hidden
-                >
-
-                    <div
-                        class="achievements-empty-icon"
-                        aria-hidden="true"
-                    >
-                        🏆
-                    </div>
-
-                    <p>업적을 불러올 수 없습니다.</p>
-
-                    <span>
-                        업적 시스템의 파일 연결을 확인해 주세요.
-                    </span>
-
-                </div>
-
-            </section>
-
-        </div>
-
-
-        <!-- ====================================
-             업적 달성 알림
-             화면 오른쪽 위에 표시
-        ===================================== -->
-
-        <div
-            id="achievement-toast-container"
-            class="achievement-toast-container"
-            aria-live="polite"
-            aria-atomic="false"
-        >
-            <!-- achievements.js에서 알림 생성 -->
-        </div>
-
+        </section>
 
     </div>
 
 
-    <!-- ========================================
-         JavaScript 파일
-         의존 순서 유지
-    ========================================= -->
+    <!-- =================================
+         업적 오버레이
+         ================================= -->
+    <div
+        id="achievements-overlay"
+        class="achievements-overlay"
+        hidden
+    >
 
-    <!-- 아이템 및 희귀도 -->
+        <section
+            id="achievements-panel"
+            class="achievements-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="achievements-title"
+        >
+
+            <!-- 업적 제목과 닫기 버튼 -->
+            <header class="achievements-header">
+
+                <div class="achievements-title-area">
+
+                    <h2
+                        id="achievements-title"
+                        class="achievements-title"
+                    >
+                        ACHIEVEMENTS
+                    </h2>
+
+                    <p class="achievements-subtitle">
+                        뽑기와 수집을 통해 다양한 업적을 달성하세요.
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="achievements-close-button"
+                    class="achievements-close-button"
+                    aria-label="업적 목록 닫기"
+                >
+                    ×
+                </button>
+
+            </header>
+
+
+            <!-- 업적 달성 진행도 -->
+            <section class="achievements-progress">
+
+                <div class="achievements-progress-header">
+
+                    <span class="achievements-progress-label">
+                        달성한 업적
+                    </span>
+
+                    <strong id="achievements-progress-count">
+                        0 / 12
+                    </strong>
+
+                </div>
+
+                <div
+                    id="achievements-progress-bar"
+                    role="progressbar"
+                    aria-label="업적 달성 진행도"
+                    aria-valuemin="0"
+                    aria-valuemax="12"
+                    aria-valuenow="0"
+                >
+                    <div
+                        id="achievements-progress-fill"
+                    ></div>
+                </div>
+
+            </section>
+
+
+            <!-- JS가 업적 카드를 표시하는 영역 -->
+            <div
+                id="achievements-grid"
+            ></div>
+
+
+            <!-- 업적이 없을 때 사용할 안내 -->
+            <p
+                id="achievements-empty"
+                hidden
+            >
+                아직 표시할 업적이 없습니다.
+            </p>
+
+        </section>
+
+    </div>
+
+
+    <!-- =================================
+         업적 달성 알림
+         ================================= -->
+    <div
+        id="achievement-toast-container"
+        class="achievement-toast-container"
+        aria-live="polite"
+        aria-atomic="false"
+    ></div>
+
+
+    <!-- =================================
+         JavaScript
+         순서를 유지해 주세요!
+         ================================= -->
+
+    <!-- 등급과 아이템 목록 -->
     <script src="rarity.js" defer></script>
 
-    <!-- 희귀도별 효과 -->
+    <!-- 뽑기 효과 -->
     <script src="effects.js" defer></script>
 
-    <!-- 도감 -->
+    <!-- 도감 기능 -->
     <script src="codex.js" defer></script>
 
-    <!-- 뽑기 및 인벤토리 -->
+    <!-- 기본 뽑기와 인벤토리 -->
     <script src="script.js" defer></script>
 
-    <!-- 업적 -->
+    <!-- 업적 기능 -->
     <script src="achievements.js" defer></script>
 
 </body>
